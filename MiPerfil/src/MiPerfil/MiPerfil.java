@@ -40,6 +40,14 @@ public class MiPerfil extends JFrame {
 	 * Create the frame.
 	 */
 	public MiPerfil() {
+		
+		// Introducimos Strings para utilizarlos cumplimentando cada caja para que aparezca ya completada al ejecutar
+		// también podría dejar las cajas vacías y dejar que el "usuario" las complete. 
+		String nombre="Amadeo";
+		String apellidos="Penella Santarremigia";
+		String edad="39";
+		String email="penella.amadeo@gmail.com";
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -53,7 +61,7 @@ public class MiPerfil extends JFrame {
 		contentPane.add(etiquetaNombre);
 		
 		// Caja para poner el Nombre
-		cajaNombre = new JTextField();
+		cajaNombre = new JTextField(nombre);
 		cajaNombre.setBounds(10, 31, 133, 20);
 		contentPane.add(cajaNombre);
 		cajaNombre.setColumns(10);
@@ -64,7 +72,7 @@ public class MiPerfil extends JFrame {
 		contentPane.add(etiquetaApellidos);
 		
 		// Caja para poner apellidos
-		cajaApellidos = new JTextField();
+		cajaApellidos = new JTextField(apellidos);
 		cajaApellidos.setBounds(10, 97, 214, 20);
 		contentPane.add(cajaApellidos);
 		cajaApellidos.setColumns(10);
@@ -75,7 +83,7 @@ public class MiPerfil extends JFrame {
 		contentPane.add(etiquetaEdad);
 		
 		// Caja para poner Edad
-		cajaEdad = new JTextField();
+		cajaEdad = new JTextField(edad);
 		cajaEdad.setBounds(10, 162, 46, 20);
 		contentPane.add(cajaEdad);
 		cajaEdad.setColumns(10);
@@ -86,8 +94,8 @@ public class MiPerfil extends JFrame {
 		contentPane.add(etiquetaEmail);
 		
 		// Caja para poner el Email
-		cajaEmail = new JTextField();
-		cajaEmail.setBounds(10, 224, 163, 20);
+		cajaEmail = new JTextField(email);
+		cajaEmail.setBounds(10, 224, 192, 20);
 		contentPane.add(cajaEmail);
 		cajaEmail.setColumns(10);
 		
