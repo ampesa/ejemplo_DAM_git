@@ -72,6 +72,26 @@ public class Jugador {
 	public Jugador() {
 		
 	}
+	
+	//comprobar si una cadena de texto es un número
+	public boolean isNumeric (String cadena) {
+		try {
+			Integer.parseInt(cadena);
+			return true;
+		}catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+	
+	//Comprobar si una cadena es un conjunto de espacios
+	public boolean sonEspacios (String cad){
+	for (int i=0; i<cad.length(); i++)
+	if (cad.charAt(i) != ' ')
+	return false;
+	
+	return true;
+		
+	}
 
 	//definimos como queremos presentar los datos con un String toString
 	public String toString(){
