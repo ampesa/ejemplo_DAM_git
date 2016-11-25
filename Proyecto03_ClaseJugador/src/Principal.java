@@ -58,7 +58,7 @@ public class Principal extends JFrame {
 		player1.setApellido1("");
 		player1.setApellido2("");
 		player1.setNick("");
-		player1.setEdad(99);
+		player1.setEdad(999);
 		player1.setPuntos(0);
 		player1.setId(0);
 
