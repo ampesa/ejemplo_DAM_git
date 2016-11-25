@@ -120,7 +120,7 @@ public class Principal extends JFrame {
 		textApellido1.addActionListener (new ActionListener() {
 				public void actionPerformed (ActionEvent arg0) {
 					//al hacer intro se rellena el Apellido1
-					player1.setNombre(textApellido1.getText());
+					player1.setApellido1(textApellido1.getText());
 				}
 		});
 		
@@ -133,7 +133,7 @@ public class Principal extends JFrame {
 		textApellido2.addActionListener (new ActionListener() {
 				public void actionPerformed (ActionEvent arg0) {
 					//al hacer intro se rellena el Apellido2
-					player1.setNombre(textApellido2.getText());
+					player1.setApellido2(textApellido2.getText());
 				}
 		});
 		
@@ -146,7 +146,7 @@ public class Principal extends JFrame {
 		textNick.addActionListener (new ActionListener() {
 				public void actionPerformed (ActionEvent arg0) {
 					//al hacer intro se rellena el Nick
-					player1.setNombre(textNick.getText());
+					player1.setNick(textNick.getText());
 				}
 		});
 		
@@ -157,9 +157,16 @@ public class Principal extends JFrame {
 		contentPane.add(textEdad);
 		//añadimos un listener sobre el campo textEdad esperando el intro
 		textEdad.addActionListener (new ActionListener() {
-				public void actionPerformed (ActionEvent arg0) {
-					//al hacer intro se rellena la Edad
-					player1.setNombre(textEdad.getText());
+			// al hacer intro se rellena el dato del jugador	
+			public void actionPerformed (ActionEvent arg0) {
+					//comprobamos si el dato es númerico con el método isNumeric de la clase jugador
+					if (player1.isNumeric(textEdad.getText())==true){
+						//si se cumple la condición y es numérico lo convertimos en entero y se lo asignamos al jugador con setEdad
+						player1.setEdad(Integer.parseInt(textEdad.getText()));
+						//si no es númerico le asigno un valor que utilizaremos para identificar el error y comunicarlo al usuario
+					}else {
+						player1.setEdad(999);
+					}
 				}
 		});
 		
@@ -169,17 +176,22 @@ public class Principal extends JFrame {
 		//añadimos un listener sobre el botón A JUGAR
 		btnValidar.addActionListener (new ActionListener() {
 				public void actionPerformed (ActionEvent arg0) {
-					//al pulsar el bontón A JUGAR mostramos el mensaje en la caja de texto textValidacion
-				if (player1.getNombre().length()==0){
+				//al pulsar el bontón A JUGAR mostramos el mensaje en la caja de texto textValidacion según la estrucutra de comprobación
+				//si la Edad es incorrecta, setEdad le habrá asignado el valor 999, por lo que si getEdad es igual a 999 la edad no será correcta.
+				if (player1.getEdad()==999){
 					textValidacion.setText("La EDAD no es correcta o falta. No olvide pulsar intro");
-				}else if (player1.getNombre().length()==0){
+				//si Edad es correcta seguimos con la validación del Nombre
+				//si getNombre contiene está vacío, contiene solo espacios se lo indicaremos al usuario
+				//lo mismo es aplicable al resto de camos Apellido1, Apellido2 y Nick
+				}else if (player1.sonEspacios(player1.getNombre())){
 					textValidacion.setText("Falta el NOMBRE. Escríbalo y pulse intro");
-				}else if (player1.getApellido1().length()==0){
+				}else if (player1.sonEspacios(player1.getApellido1())){
 					textValidacion.setText("Falta el APELLIDO 1. Escríbalo y pulse intro");
-				}else if (player1.getApellido2().length()==0){
+				}else if (player1.sonEspacios(player1.getApellido2())){
 					textValidacion.setText("Falta el APELLIDO 2. Escríbalo y pulse intro");
-				}else if (player1.getNick().length()==0){
+				}else if (player1.sonEspacios(player1.getNick())){
 					textValidacion.setText("Falta el NICK. Escríbalo y pulse intro");
+				//si no se cumple ninguna de las condiciones anteriores y los datos son correctos confirmamos al usuario que se ha creado un nuevo Jugador
 				}else {
 					textValidacion.setText("Nuevo Jugador: "+player1.getNombre()+" "+player1.getApellido1()+" "+player1.getApellido2()+" "+player1.getNick()+" de "+player1.getEdad()+" años");
 				}
