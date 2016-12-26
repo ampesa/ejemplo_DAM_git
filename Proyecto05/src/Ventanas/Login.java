@@ -200,15 +200,16 @@ public class Login extends JFrame {
 				//si no se cumple ninguna de las condiciones anteriores y los datos son correctos confirmamos al usuario que se ha creado un nuevo Jugador
 				}else {
 					textValidacion.setText("Nuevo Jugador: "+player1.getNombre()+" "+player1.getApellido1()+" "+player1.getApellido2()+" "+player1.getNick()+" de "+player1.getEdad()+" años");
+					
+					//tras la validación pasamos el nombre introducido por el jugador a la ventana de juego y la hacemos visible
+					vJuego.setJTextField(textNombre);
+					vJuego.setVisible(true);
+					//cerramos la ventana de Login para dejar solo visible la de Juego
+					vLogin.dispose();
+					}
+								
 				}
 				
-				//tras la validación pasamos el nombre introducido por el jugador a la ventana de juego y la hacemos visible
-				vJuego.setJTextField(textNombre);
-				vJuego.setVisible(true);
-				
-				//cerramos la ventana de Login para dejar solo visible la de Juego
-				vLogin.dispose();
-				}
 		});
 		
 		btnValidar.setBounds(90, 190, 249, 23);
