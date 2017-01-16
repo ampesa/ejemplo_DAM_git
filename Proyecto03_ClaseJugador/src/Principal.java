@@ -30,18 +30,10 @@ public class Principal extends JFrame {
 	
 	//lanzamos el método main, iniciamos la ventana.
 	public static void main(String[] args) {
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//creamos un objeto de la clase Principal y lo hacemos visible (setVisible(true))
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+
+		//creamos un objeto de la clase Principal y lo hacemos visible (setVisible(true))
+		Principal frame = new Principal();
+		frame.setVisible(true);
 	}
 
 	//constructor
@@ -95,6 +87,8 @@ public class Principal extends JFrame {
 		
 		//Creamos la caja de texto en la que mostraremos al usuario la validación de sus datos
 		JTextArea textValidacion = new JTextArea();
+		textValidacion.setWrapStyleWord(true);
+		textValidacion.setLineWrap(true);
 		textValidacion.setBounds(46, 224, 333, 40);
 		contentPane.add(textValidacion);
 		

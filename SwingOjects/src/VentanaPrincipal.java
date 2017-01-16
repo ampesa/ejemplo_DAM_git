@@ -18,7 +18,7 @@ public class VentanaPrincipal extends JFrame{
 	
 	//layout
 	private JPanel contentPane;
-	private JTextField txtform;
+	private JTextField txtForm;
 	private JTextField txtMsg;
 	private JTextArea textArea;
 	private JButton btnComprobación;
@@ -48,16 +48,18 @@ public class VentanaPrincipal extends JFrame{
 		
 		
 		//nuevo JTextField
-		txtform = new JTextField();
-		txtform.setText("escribe algo");
-		txtform.setBounds(10, 36, 364, 20);
-		contentPane.add(txtform);
-		txtform.setColumns(10);
+		txtForm = new JTextField();
+		txtForm.setText("escribe algo");
+		txtForm.setBounds(10, 36, 364, 20);
+		contentPane.add(txtForm);
+		txtForm.setColumns(10);
 		
 		//nuevo texto mensaje
 		txtMsg = new JTextField();
 		txtMsg.setText("escribe ago");
 		txtMsg.setBounds(10, 230, 364, 20);
+		txtMsg.setText("Nuevo mensaje de Texto");
+		txtMsg.setEnabled(true);
 		contentPane.add(txtMsg);
 		txtMsg.setColumns(10);
 		
@@ -67,7 +69,13 @@ public class VentanaPrincipal extends JFrame{
 		btnComprobación.addActionListener(new ActionListener() {
 			//Qué hacemos cuando nos llega un evento
 			public void actionPerformed(ActionEvent arg0) {
-			}
+				String texto=txtForm.getText();
+				if (texto.length()==0){
+					txtMsg.setText("NO HAY CONTENIDO");
+				}else{
+					txtMsg.setText("HAY CONTENIDO");
+				}
+					}
 		});
 		btnComprobación.setBounds(10, 67, 158, 23);
 		contentPane.add(btnComprobación);
