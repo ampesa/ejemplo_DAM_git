@@ -58,14 +58,14 @@ import java.awt.event.ActionEvent;
 public class Juego extends JFrame {
 	
 	private Juego vJ;
-	Jugador player1=new Jugador(); //creamos un nuevo objeto de la clase jugador para utilizar sus variables en esta ventana
+
 	
 	private JPanel contentPane;
 	//Establecemos JLabel lblNewLabel como una propiedad de la clase para poder trabajar con ella fuera del constructor, ampliamos su ámbito dentro de la clase
 	private JLabel lblBienvenida;
 	private JLabel lblPuntuacion;
 	private JTextField textNombre;
-	private int Puntuacion=player1.getPuntos();
+	private int acumulado=0;
 	//definimos la variable textOperaciones para contener las operaciones del jugador, es un JTextArea para añadirle cada operación con el método append
 	private JTextField textOperaciones; 
 	private JButton mathDice;
@@ -98,21 +98,30 @@ public class Juego extends JFrame {
 	//creamos una variable de tipo objeto para almacenar el "resultado" de las operaciones y la inciamos a null
 	private Object resultado=null;
 
-
-	//creamos un setter para utilizar el nombre introducido por el jugador en la ventana Login
+		
+	// creamos un setter para utilizar el nombre introducido por el jugador en la ventana Login
 	public void setJTextField (JTextField textNombre) {
 		this.textNombre=textNombre;		
-		//definimos la etiqueta de la ventana juego como un setText de la cadena Bienvenido al juego + el nombre introducido por el jugador
-		lblBienvenida.setText("Bienvenido al juego " + textNombre.getText());
+		// definimos la etiqueta de la ventana juego como un setText de la cadena Bienvenido al juego + el nombre introducido por el jugador
+		lblBienvenida.setText("Bienvenido al juego " + textNombre.getText());	
 	}
 	
-
+	// creamos un setter para recuperar los puntos acumulados en la tirada anterior y mostrarlos en la etiqueta puntuación
+	public void puntosAcumulado (int acumulado){
+		this.acumulado= acumulado;
+		// definimos la etiqueta puntuación que se mostrará al pulsar sobre el botón "REPETIR", recuperando el valor acumulado de los puntos
+		lblPuntuacion.setText("Tu puntuación es: " + acumulado);
+	}
+	
+	
 	//constructor de la clase Juego
 	public Juego() {
 		
-				
 		//creamos la referencia, de manera que vJ será la ventana actual. De esta manera podremos cerrarla y llamarla
-		vJ=this;
+		vJ=this;	
+		
+		//creamos un nuevo objeto de la clase jugador para utilizar sus variables en esta ventana
+		Jugador player1=new Jugador();
 		
 		//definimos la ventana
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,22 +131,23 @@ public class Juego extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		//etiqueta para el texto de bienvenida 
+		// Etiqueta Bienvenida; Damos la bienvenida al jutador indicando su nombre introducido en la ventana Login 
 		lblBienvenida = new JLabel("Jugador");
 		lblBienvenida.setFont(new Font("Calibri", Font.BOLD, 16));
 		lblBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBienvenida.setBounds(573, 11, 278, 40);
 		contentPane.add(lblBienvenida);
 		
-		//con esta etiqueta mostraremos los puntos del jugador
+		// Etiqueta Puntuación: con esta etiqueta mostraremos los puntos del jugador
 		lblPuntuacion = new JLabel("Puntuacion");
-		lblPuntuacion.setText("Tu puntuación es: "+Puntuacion); //mostramos los puntos acumulados en la variable puntos de la clase Jugador
+		//mostramos los puntos iniciales en la variable puntos de la clase Jugador
+		lblPuntuacion.setText("Tu puntuación es: "+player1.getPuntos()); 
 		lblPuntuacion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPuntuacion.setFont(new Font("Calibri", Font.BOLD, 16));
 		lblPuntuacion.setBounds(573, 47, 278, 40);
 		contentPane.add(lblPuntuacion);		
 		
-		//labels para los dados
+		//labels para los dados, del 1 al 3 para los de tres caras, el 4 y el 5 para los de seis caras y el 6 para el de doce caras
 		dado1 = new JLabel("");
 		dado1.setHorizontalAlignment(SwingConstants.CENTER);
 		dado1.setBounds(10, 11, 150, 150);
@@ -168,44 +178,52 @@ public class Juego extends JFrame {
 		dado6.setBounds(157, 333, 173, 173);
 		contentPane.add(dado6);
 		
-		//creamos el objeto botón para la suma
+		// creamos el objeto botón para la suma
 		btnSuma = new JButton("+");
 		btnSuma.setFont(new Font("Calibri", Font.BOLD, 24));
 		btnSuma.setBounds(573, 115, 108, 46);
 		contentPane.add(btnSuma);
 		
-		//creamos el objeto botón para la resta
+		// creamos el objeto botón para la resta
 		btnResta = new JButton("-");
 		btnResta.setFont(new Font("Calibri", Font.BOLD, 24));
 		btnResta.setBounds(743, 115, 108, 46);
 		contentPane.add(btnResta);
 		
-		//campo de texto para las operaciones del jugador
-		textOperaciones = new JTextField("");//incializamos JTextArea textOperaciones como una cadena vacía
-		textOperaciones.setEditable(false);
+		// Creamos el campo de texto para las operaciones del jugador
+		textOperaciones = new JTextField(""); // incializamos JTextArea textOperaciones como una cadena vacía
+		// evitamos que el jugador pueda introducir cualquier texto en este campo, solo podrá hacerlo con los dados o los botones + o -
+		textOperaciones.setEditable(false); 
 		textOperaciones.setFont(new Font("Calibri", Font.BOLD, 24));
 		textOperaciones.setBounds(573, 218, 278, 40);
 		contentPane.add(textOperaciones);
-		textOperaciones.setColumns(10);//limitamos a 9 caracteres para finalizar operaciones al introducir en número máximo de dado (5 dados + 4 operaciones)
-		Border border = BorderFactory.createLineBorder(Color.BLACK); //ponemos un borde al JTextField para resaltarlo en la ventana de juego
+		textOperaciones.setColumns(10);
+		// ponemos un borde al JTextField para resaltarlo en la ventana de juego, mejora estética
+		Border border = BorderFactory.createLineBorder(Color.BLACK); 
 		textOperaciones.setBorder(BorderFactory.createCompoundBorder(border, 
 		            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		
-		//botón para comprobar si son correctas o no las operaciones del jugador
+		// Creamos un botón "MATHDICE" para comprobar si son correctas o no las operaciones del jugador
 		mathDice = new JButton("MATHDICE");
+		// Añadimos el listener sobre el botón
 		mathDice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// Si "resultado" es un numero entero igual que el número aleatorio del dado de 12 caras
+				// (+1 para convertir el aleatorio de 0 a 11 en el valor mostrado por la imagen del dado)
+				// el área de texto para informar al jugador mostrará correcto y sumaremos 5 puntos a la puntuación del jugador
 				if ((Integer)resultado==numerosDados12+1){
-					System.out.println("El dado 12 es "+(numerosDados12+1));
+					// Le confirmamos al jugador que ha acertado y le invitamos a seguir jugando
 					promptJugador.setText("¡¡¡CORRECTO!!!\npulsa REPETIR para seguir\njugando");
-					//Jugador.setPuntos();
-					Puntuacion=Puntuacion+5;
-					System.out.println("la puntuación es "+Puntuacion);
+					// sumamos 5 puntos a los puntos del jugador
+					player1.setPuntos(acumulado+5);
+					// pasamos los puntos al acumulado, de manera que se incremente en 5 para el siguiente acierto
+					// cuando pasemos su valor a la siguiente ventana
+					acumulado=player1.getPuntos();
+					// mostramos al jugador los puntos que lleva
+					lblPuntuacion.setText("Tu puntuación es: "+player1.getPuntos());
 				}else{
+					// En cualquier otro caso el resultado no será correcto, se lo mostraremos al jugador y no sumaremos puntos
 					promptJugador.setText("INCORRECTO,\npulsa REPETIR para seguir\njugando");
-					System.out.println("El dado 12 es "+(numerosDados12+1));
-					Puntuacion=Puntuacion-5;
-					System.out.println("la puntuación es "+Puntuacion);
 				}
 				tocaDado=false;
 				tocaOperador=false;
@@ -222,18 +240,21 @@ public class Juego extends JFrame {
 		// para este caso cerramos la ventana actual vJ y abrimos una nueva
 		reIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				vJ.setJTextField(textNombre);
 				vJ.dispose(); // cerramos la ventana actual
 				Juego vJ=new Juego(); // creamos un nuevo objeto de la clase juego
-				vJ.setVisible(true); //pasamos el nuevo objeto a visible. 
+				vJ.setJTextField(textNombre); // pasamos el valor de textNombre con el nombre del jugador con el método setJTextField
+				vJ.puntosAcumulado(acumulado); // pasamos los puntos acumulados a la nueva ventana
+				vJ.setVisible(true); // pasamos la nueva ventana a visible. 
 			}
 		});
 		reIniciar.setFont(new Font("Calibri", Font.PLAIN, 24));
 		reIniciar.setBounds(573, 344, 278, 40);
 		contentPane.add(reIniciar);
 		
-		//Botón para mostrar menajes/instrucciones al jugador
+		// Área de texto para mostrar menajes/instrucciones al jugador
 		promptJugador = new JTextArea();
+		// Impedimos que el jugador pueda introducir texto aquí, esta área de texto es solo para mostrarle instrucciones
+		// y dar feedback sobre el resultado
 		promptJugador.setEditable(false);
 		promptJugador.setLineWrap(true);
 		promptJugador.setFont(new Font("Calibri", Font.PLAIN, 24));
@@ -327,12 +348,15 @@ public class Juego extends JFrame {
 				} catch (ScriptException e1) {
 					e1.printStackTrace();
 				}
-				System.out.println(resultado);//imprimimos el valor de result por pantalla para comprobar que se realiza correctamente la operación.
-
-				dado.removeMouseListener(this); // eliminamos el listener para que no se pueda elegir de nuevo este (this) dado
-				dado.setIcon(dadoGris); // pasamos el dado seleccionado a color gris para indicar al jugador que lo ha seleccionado y ya no puede volver a utilizarlo
-				tocaDado=false;	// pasamos tocaDado a false, para que no se puedan seleccionar otros dados in haber introducido antes un operador (signo + o -)
-				tocaOperador=true; // pasamos tocaOperador a true para habilitar los listeners de los botones de signo + o -
+				
+				// eliminamos el listener para que no se pueda elegir de nuevo este (this) dado
+				dado.removeMouseListener(this); 
+				// pasamos el dado seleccionado a color gris para indicar al jugador que lo ha seleccionado y ya no puede volver a utilizarlo
+				dado.setIcon(dadoGris); 
+				// pasamos tocaDado a false, para que no se puedan seleccionar otros dados in haber introducido antes un operador (signo + o -)
+				tocaDado=false;	
+				// pasamos tocaOperador a true para habilitar los listeners de los botones de signo + o -
+				tocaOperador=true; 
 				
 				// añadimos listener al botón suma, su ejecución estará condicionada a que toque poner un operador y
 				// que la cadena de texto no sea de más de 9 caracteres (5 dados y 4 operadores) de lo contrario el 
@@ -376,6 +400,7 @@ public class Juego extends JFrame {
 		public void mouseReleased (MouseEvent e) {}
 		
 	} //fin de la inner class
+
 
 
 }//fin método main

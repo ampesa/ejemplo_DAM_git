@@ -1,5 +1,11 @@
 package Juego;
 
+import javax.swing.JTextField;
+
+import Ventanas.Juego;
+
+
+
 public class Jugador {
 		
 	// Definimos las variables o propiedades a utilizar en la clase Jugador e inicializamos las variables con un valor por defecto
@@ -11,6 +17,7 @@ public class Jugador {
 		private int edad=0;
 		private int id=0;
 		
+	
 	//definimos los getter y los setter		
 	public String getNombre() {
 		return nombre;
@@ -98,7 +105,5 @@ public class Jugador {
 		return this.nombre+" "+this.apellido1+" "+this.apellido2+" "+this.nick+" "+this.edad+" "+this.puntos;
 		
 	}
-	
-
 
 }
