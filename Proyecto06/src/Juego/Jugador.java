@@ -5,7 +5,6 @@ import javax.swing.JTextField;
 import Ventanas.Juego;
 
 
-
 public class Jugador {
 		
 	// Definimos las variables o propiedades a utilizar en la clase Jugador e inicializamos las variables con un valor por defecto
