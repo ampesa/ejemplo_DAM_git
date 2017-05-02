@@ -2,6 +2,7 @@ package windows;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -82,7 +83,7 @@ public class InsertWindow extends JFrame {
 		contentPane.add(passwordLabel);
 		
 		// Cremaos el campo para rellenar la contraseña
-		passwordTextField = new JTextField();
+		passwordTextField = new JPasswordField();
 		passwordTextField.setBounds(44, 146, 199, 20);
 		contentPane.add(passwordTextField);
 		passwordTextField.setColumns(30);
