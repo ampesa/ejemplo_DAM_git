@@ -91,7 +91,7 @@ public class InsertWindow extends JFrame {
 		JTextArea prompt_textArea = new JTextArea();
 		prompt_textArea.setLineWrap(true);
 		prompt_textArea.setColumns(30);
-		prompt_textArea.setBounds(80, 192, 133, 58);
+		prompt_textArea.setBounds(44, 192, 199, 58);
 		contentPane.add(prompt_textArea);
 		
 		// Creamos un botón que ejecutará el programa de validación (Validator.java)
@@ -129,8 +129,7 @@ public class InsertWindow extends JFrame {
 					prompt_textArea.setText("Ha habido un error en la autenticación de " + user1.getUser_domain() + " en " + user1.getLdap());
 
 				}
-				// reseteamos los camposde texto para introducir otros datos
-				ldapTextField.setText("");
+				// reseteamos los campos de texto para introducir otros datos de usuario y password, dejando el mismo ldap
 				user_domainTextField.setText("");
 				passwordTextField.setText("");
 				
