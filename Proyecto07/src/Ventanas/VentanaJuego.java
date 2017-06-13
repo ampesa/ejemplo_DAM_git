@@ -103,22 +103,6 @@ public class VentanaJuego extends JPanel {
 	private VentanaPerfil vPerfil;
 	private VentanaJuego vJuego;
 		
-	// creamos un setter para utilizar el nombre introducido por el jugador en la ventana Login
-	/*public void setJTextField (JTextField textNombre) {
-		this.textNombre=textNombre;		
-		// definimos la etiqueta de la ventana juego como un setText de la cadena Bienvenido al juego + el nombre introducido por el jugador
-		lblBienvenida.setText("Bienvenido al juego " + textNombre.getText());	
-	}
-	
-	// creamos un setter para recuperar los puntos acumulados en la tirada anterior y mostrarlos en la etiqueta puntuación
-	public void puntosAcumulado (int acumulado){
-		this.acumulado= acumulado;
-		// definimos la etiqueta puntuación que se mostrará al pulsar sobre el botón "REPETIR", recuperando el valor acumulado de los puntos
-		lblPuntuacion.setText("Tu puntuación es: " + acumulado);
-	}*/
-
-	//creamos un nuevo objeto de la clase jugador para utilizar sus variables en esta ventana	
-	//Jugador player = new Jugador();
 		
 	//CONSTRUCTOR
 	public VentanaJuego() {

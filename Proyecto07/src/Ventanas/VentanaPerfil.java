@@ -1,6 +1,8 @@
-//Esta vetana está dentro del paquete ventanas
+// Esta vetana está dentro del paquete ventanas
 package Ventanas;
 
+
+// Importamos las clases necesarias
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -15,11 +17,22 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Component;
+import java.awt.GridLayout;
+import javax.swing.DebugGraphics;
+import java.awt.ComponentOrientation;
 
-//Declaramos la clase login como una extensión de JFrame
+import javax.swing.ImageIcon; //importamos la clase ImageIcon para asignar imagenes a los jlabel
+
+
+
+//Declaramos la clase Perfil como una extensión de JPANEL
 public class VentanaPerfil extends JPanel {
 	
-	//Variables de la ventana Login
+	//Variables de la ventana Perfil
 	private JPanel contentPane;
 	private JTextField textNombre;
 	private JTextField textApellido1;
@@ -27,9 +40,18 @@ public class VentanaPerfil extends JPanel {
 	private JTextField textNick;
 	private JTextField textEdad;
 	private JTextField textPuntos;	
+	private JTextArea textValidacion;
 	
+	// Definimos un nueva etiqueta que recogerá el avatar del usuario
+	private JLabel lblAvatar;
+	
+	// Definimos una imagen ImageIcon para el avatar del usuario
+	private ImageIcon avatar;
+	
+	// Jugador que recogerá los datos del usuario
 	private Jugador player;
-
+	
+	// Definimos las ventanas con las que interactuará la VentanaPerfil para poder llamarlas
 	private VentanaJuego vJuego;
 	private VentanaLogin vLogin;
 	private VentanaPerfil vPerfil;
@@ -38,102 +60,371 @@ public class VentanaPerfil extends JPanel {
 	//constructor de la VentanaPerfil
 	public VentanaPerfil() {
 		
+		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+		
 		//definimos la ventana
-		setBounds(100, 100, 450, 322);
+		setBounds(100, 100, 950, 550);
 		//contentPane = new JPanel();
 		contentPane=this;
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
-		setLayout(null);
 
 		//Creamos un nuevo objeto de la clase Jugador
-		player=new Jugador ();		
+		player=new Jugador ();
+		
+		//Se genera el gridBayLayout con el que configuraremos la ventana
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[] {100, 100, 135, 135, 30, 135, 135, 30};
+		gridBagLayout.rowHeights = new int[] {34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 
 		//Creamos la etiqueta principal de la ventana. La ponemos en negrita para destacarla del resto
 		JLabel datosJugador = new JLabel("DATOS JUGADOR");
+		datosJugador.setHorizontalAlignment(SwingConstants.CENTER);
 		datosJugador.setFont(new Font("Tahoma", Font.BOLD, 12));
-		datosJugador.setBounds(160, 11, 116, 14);
-		contentPane.add(datosJugador);
+		GridBagConstraints gbc_datosJugador = new GridBagConstraints();
+		gbc_datosJugador.gridwidth = 4;
+		gbc_datosJugador.insets = new Insets(0, 0, 5, 5);
+		gbc_datosJugador.gridx = 2;
+		gbc_datosJugador.gridy = 1;
+		contentPane.add(datosJugador, gbc_datosJugador);
+		
+		JLabel label = new JLabel("");
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.fill = GridBagConstraints.BOTH;
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 1;
+		gbc_label.gridy = 0;
+		add(label, gbc_label);
+		
+		JLabel label_1 = new JLabel("");
+		GridBagConstraints gbc_label_1 = new GridBagConstraints();
+		gbc_label_1.fill = GridBagConstraints.BOTH;
+		gbc_label_1.insets = new Insets(0, 0, 5, 5);
+		gbc_label_1.gridx = 2;
+		gbc_label_1.gridy = 0;
+		add(label_1, gbc_label_1);
+		
+		JLabel label_2 = new JLabel("");
+		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.fill = GridBagConstraints.BOTH;
+		gbc_label_2.insets = new Insets(0, 0, 5, 0);
+		gbc_label_2.gridx = 3;
+		gbc_label_2.gridy = 0;
+		add(label_2, gbc_label_2);
+		
 		
 		//Creamos la etiqueta para el campo de texto Nombre
 		JLabel etiquetaNombre = new JLabel("NOMBRE");
 		etiquetaNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
-		etiquetaNombre.setBounds(90, 52, 63, 14);
-		contentPane.add(etiquetaNombre);
+		GridBagConstraints gbc_etiquetaNombre = new GridBagConstraints();
+		gbc_etiquetaNombre.anchor = GridBagConstraints.EAST;
+		gbc_etiquetaNombre.insets = new Insets(10, 10, 10, 10);
+		gbc_etiquetaNombre.gridx = 2;
+		gbc_etiquetaNombre.gridy = 3;
+		contentPane.add(etiquetaNombre, gbc_etiquetaNombre);
 		
-		//Creamos la etiqueta para el campo de texto Apellido1
-		JLabel etiquetaApellido1 = new JLabel("APELLIDO 1");
-		etiquetaApellido1.setBounds(90, 77, 75, 14);
-		contentPane.add(etiquetaApellido1);
-		
-		//Creamos la etiqueta para el campo de texto Apellido2
-		JLabel etiquetaApellido = new JLabel("APELLIDO 2");
-		etiquetaApellido.setBounds(90, 102, 75, 14);
-		contentPane.add(etiquetaApellido);
-		
-		//Creamos la etiqueta para el campo de texto Nick
-		JLabel etiquetaNick = new JLabel("NICK");
-		etiquetaNick.setBounds(90, 127, 63, 14);
-		contentPane.add(etiquetaNick);
-		
-		//Creamos la etiqueta para el campo de texto Edad
-		JLabel etiquetaEdad = new JLabel("EDAD");
-		etiquetaEdad.setBounds(90, 152, 63, 14);
-		contentPane.add(etiquetaEdad);
-		
-		//Creamos la caja de texto en la que mostraremos al usuario la validación de sus datos
-		JTextArea textValidacion = new JTextArea();
-		textValidacion.setWrapStyleWord(true);
-		textValidacion.setLineWrap(true);
-		textValidacion.setBounds(46, 271, 333, 40);
-		contentPane.add(textValidacion);
 		
 		//Creamos el campo de texto para introducir el Nombre
 		textNombre = new JTextField();
-		textNombre.setBounds(175, 49, 164, 20);
-		contentPane.add(textNombre);
+		GridBagConstraints gbc_textNombre = new GridBagConstraints();
+		gbc_textNombre.fill = GridBagConstraints.BOTH;
+		gbc_textNombre.insets = new Insets(10, 5, 10, 5);
+		gbc_textNombre.gridx = 3;
+		gbc_textNombre.gridy = 3;
+		contentPane.add(textNombre, gbc_textNombre);
 		textNombre.setColumns(10);
+		
+		JLabel label_4 = new JLabel("");
+		GridBagConstraints gbc_label_4 = new GridBagConstraints();
+		gbc_label_4.fill = GridBagConstraints.BOTH;
+		gbc_label_4.insets = new Insets(0, 0, 5, 0);
+		gbc_label_4.gridx = 3;
+		gbc_label_4.gridy = 1;
+		add(label_4, gbc_label_4);
+		
+		
+		//Creamos la etiqueta para el campo de texto Apellido1
+		JLabel etiquetaApellido1 = new JLabel("APELLIDO 1");
+		GridBagConstraints gbc_etiquetaApellido1 = new GridBagConstraints();
+		gbc_etiquetaApellido1.anchor = GridBagConstraints.EAST;
+		gbc_etiquetaApellido1.insets = new Insets(10, 10, 10, 10);
+		gbc_etiquetaApellido1.gridx = 2;
+		gbc_etiquetaApellido1.gridy = 4;
+		contentPane.add(etiquetaApellido1, gbc_etiquetaApellido1);
+		
 		
 		//Creamos el campo de texto para introducir el Apellido1
 		textApellido1 = new JTextField();
 		textApellido1.setColumns(10);
-		textApellido1.setBounds(175, 74, 164, 20);
-		contentPane.add(textApellido1);
+		GridBagConstraints gbc_textApellido1 = new GridBagConstraints();
+		gbc_textApellido1.fill = GridBagConstraints.BOTH;
+		gbc_textApellido1.insets = new Insets(10, 5, 10, 5);
+		gbc_textApellido1.gridx = 3;
+		gbc_textApellido1.gridy = 4;
+		contentPane.add(textApellido1, gbc_textApellido1);
+		
+		JLabel label_5 = new JLabel("");
+		GridBagConstraints gbc_label_5 = new GridBagConstraints();
+		gbc_label_5.fill = GridBagConstraints.BOTH;
+		gbc_label_5.insets = new Insets(0, 0, 5, 5);
+		gbc_label_5.gridx = 2;
+		gbc_label_5.gridy = 2;
+		add(label_5, gbc_label_5);
+		
+		JLabel label_6 = new JLabel("");
+		GridBagConstraints gbc_label_6 = new GridBagConstraints();
+		gbc_label_6.fill = GridBagConstraints.BOTH;
+		gbc_label_6.insets = new Insets(0, 0, 5, 0);
+		gbc_label_6.gridx = 3;
+		gbc_label_6.gridy = 2;
+		add(label_6, gbc_label_6);
+		
+		
+		//Creamos la etiqueta para el campo de texto Apellido2
+		JLabel etiquetaApellido = new JLabel("APELLIDO 2");
+		GridBagConstraints gbc_etiquetaApellido = new GridBagConstraints();
+		gbc_etiquetaApellido.anchor = GridBagConstraints.EAST;
+		gbc_etiquetaApellido.insets = new Insets(10, 10, 10, 10);
+		gbc_etiquetaApellido.gridx = 2;
+		gbc_etiquetaApellido.gridy = 5;
+		contentPane.add(etiquetaApellido, gbc_etiquetaApellido);
+		
 		
 		//Creamos el campo de texto para introducir el Apellido2
 		textApellido2 = new JTextField();
 		textApellido2.setColumns(10);
-		textApellido2.setBounds(175, 99, 164, 20);
-		contentPane.add(textApellido2);
+		GridBagConstraints gbc_textApellido2 = new GridBagConstraints();
+		gbc_textApellido2.fill = GridBagConstraints.BOTH;
+		gbc_textApellido2.insets = new Insets(10, 5, 10, 5);
+		gbc_textApellido2.gridx = 3;
+		gbc_textApellido2.gridy = 5;
+		contentPane.add(textApellido2, gbc_textApellido2);
+		
+		JLabel label_7 = new JLabel("");
+		GridBagConstraints gbc_label_7 = new GridBagConstraints();
+		gbc_label_7.fill = GridBagConstraints.BOTH;
+		gbc_label_7.insets = new Insets(0, 0, 5, 5);
+		gbc_label_7.gridx = 2;
+		gbc_label_7.gridy = 3;
+		add(label_7, gbc_label_7);
+		
+		JLabel label_8 = new JLabel("");
+		GridBagConstraints gbc_label_8 = new GridBagConstraints();
+		gbc_label_8.fill = GridBagConstraints.BOTH;
+		gbc_label_8.insets = new Insets(0, 0, 5, 0);
+		gbc_label_8.gridx = 3;
+		gbc_label_8.gridy = 3;
+		add(label_8, gbc_label_8);
+		
+		
+		//Creamos la etiqueta para el campo de texto Nick
+		JLabel etiquetaNick = new JLabel("NICK");
+		GridBagConstraints gbc_etiquetaNick = new GridBagConstraints();
+		gbc_etiquetaNick.anchor = GridBagConstraints.EAST;
+		gbc_etiquetaNick.fill = GridBagConstraints.VERTICAL;
+		gbc_etiquetaNick.insets = new Insets(10, 10, 10, 10);
+		gbc_etiquetaNick.gridx = 2;
+		gbc_etiquetaNick.gridy = 6;
+		contentPane.add(etiquetaNick, gbc_etiquetaNick);
+		
 		
 		//Creamos el campo de texto para introducir el Nick
 		textNick = new JTextField();
 		textNick.setColumns(10);
-		textNick.setBounds(175, 124, 164, 20);
-		contentPane.add(textNick);
+		GridBagConstraints gbc_textNick = new GridBagConstraints();
+		gbc_textNick.fill = GridBagConstraints.BOTH;
+		gbc_textNick.insets = new Insets(10, 5, 10, 5);
+		gbc_textNick.gridx = 3;
+		gbc_textNick.gridy = 6;
+		contentPane.add(textNick, gbc_textNick);
+		
+		JLabel label_9 = new JLabel("");
+		GridBagConstraints gbc_label_9 = new GridBagConstraints();
+		gbc_label_9.fill = GridBagConstraints.BOTH;
+		gbc_label_9.insets = new Insets(0, 0, 5, 5);
+		gbc_label_9.gridx = 2;
+		gbc_label_9.gridy = 4;
+		add(label_9, gbc_label_9);
+		
+		JLabel label_10 = new JLabel("");
+		GridBagConstraints gbc_label_10 = new GridBagConstraints();
+		gbc_label_10.fill = GridBagConstraints.BOTH;
+		gbc_label_10.insets = new Insets(0, 0, 5, 0);
+		gbc_label_10.gridx = 3;
+		gbc_label_10.gridy = 4;
+		add(label_10, gbc_label_10);
+		
+		
+		//Creamos la etiqueta para el campo de texto Edad
+		JLabel etiquetaEdad = new JLabel("EDAD");
+		GridBagConstraints gbc_etiquetaEdad = new GridBagConstraints();
+		gbc_etiquetaEdad.anchor = GridBagConstraints.EAST;
+		gbc_etiquetaEdad.fill = GridBagConstraints.VERTICAL;
+		gbc_etiquetaEdad.insets = new Insets(10, 10, 10, 10);
+		gbc_etiquetaEdad.gridx = 2;
+		gbc_etiquetaEdad.gridy = 7;
+		contentPane.add(etiquetaEdad, gbc_etiquetaEdad);
+		
 		
 		//Creamos el campo de texto para introducir la Edad
 		textEdad = new JTextField();
 		textEdad.setColumns(10);
-		textEdad.setBounds(175, 149, 164, 20);
-		contentPane.add(textEdad);
+		GridBagConstraints gbc_textEdad = new GridBagConstraints();
+		gbc_textEdad.fill = GridBagConstraints.BOTH;
+		gbc_textEdad.insets = new Insets(10, 5, 10, 5);
+		gbc_textEdad.gridx = 3;
+		gbc_textEdad.gridy = 7;
+		contentPane.add(textEdad, gbc_textEdad);
 		
+		JLabel label_11 = new JLabel("");
+		GridBagConstraints gbc_label_11 = new GridBagConstraints();
+		gbc_label_11.fill = GridBagConstraints.BOTH;
+		gbc_label_11.insets = new Insets(0, 0, 5, 5);
+		gbc_label_11.gridx = 2;
+		gbc_label_11.gridy = 5;
+		add(label_11, gbc_label_11);
+		
+		JLabel label_12 = new JLabel("");
+		GridBagConstraints gbc_label_12 = new GridBagConstraints();
+		gbc_label_12.fill = GridBagConstraints.BOTH;
+		gbc_label_12.insets = new Insets(0, 0, 5, 0);
+		gbc_label_12.gridx = 3;
+		gbc_label_12.gridy = 5;
+		add(label_12, gbc_label_12);
+		
+		
+		// Creamos la etiqueta para el campo de texto Puntos
 		JLabel lblPuntos = new JLabel("Puntos");
-		lblPuntos.setBounds(90, 183, 63, 14);
-		add(lblPuntos);
+		GridBagConstraints gbc_lblPuntos = new GridBagConstraints();
+		gbc_lblPuntos.anchor = GridBagConstraints.EAST;
+		gbc_lblPuntos.fill = GridBagConstraints.VERTICAL;
+		gbc_lblPuntos.insets = new Insets(10, 10, 10, 10);
+		gbc_lblPuntos.gridx = 2;
+		gbc_lblPuntos.gridy = 8;
+		add(lblPuntos, gbc_lblPuntos);
 		
+		
+		//Campo de texto que albergará los puntos que va obteniendo el jugador
 		textPuntos = new JTextField();
 		textPuntos.setEditable(false);
 		textPuntos.setHorizontalAlignment(SwingConstants.CENTER);
 		textPuntos.setColumns(10);
-		textPuntos.setBounds(175, 180, 164, 20);
-		add(textPuntos);
+		GridBagConstraints gbc_textPuntos = new GridBagConstraints();
+		gbc_textPuntos.fill = GridBagConstraints.BOTH;
+		gbc_textPuntos.insets = new Insets(20, 5, 20, 5);
+		gbc_textPuntos.gridx = 3;
+		gbc_textPuntos.gridy = 8;
+		add(textPuntos, gbc_textPuntos);
+		
+		JLabel label_13 = new JLabel("");
+		GridBagConstraints gbc_label_13 = new GridBagConstraints();
+		gbc_label_13.fill = GridBagConstraints.BOTH;
+		gbc_label_13.insets = new Insets(0, 0, 5, 5);
+		gbc_label_13.gridx = 2;
+		gbc_label_13.gridy = 6;
+		add(label_13, gbc_label_13);
+		
+		JLabel label_14 = new JLabel("");
+		GridBagConstraints gbc_label_14 = new GridBagConstraints();
+		gbc_label_14.fill = GridBagConstraints.BOTH;
+		gbc_label_14.insets = new Insets(0, 0, 5, 0);
+		gbc_label_14.gridx = 3;
+		gbc_label_14.gridy = 6;
+		add(label_14, gbc_label_14);
+		
+		JLabel label_15 = new JLabel("");
+		GridBagConstraints gbc_label_15 = new GridBagConstraints();
+		gbc_label_15.fill = GridBagConstraints.BOTH;
+		gbc_label_15.insets = new Insets(0, 0, 5, 5);
+		gbc_label_15.gridx = 0;
+		gbc_label_15.gridy = 7;
+		add(label_15, gbc_label_15);
+		
 		
 		//Creamos el boton de para validar y guardar los datos del perfil
 		JButton btnGuardar = new JButton("GUARDAR");
-		btnGuardar.setBounds(90, 226, 249, 23);
-		contentPane.add(btnGuardar);	
+		GridBagConstraints gbc_btnGuardar = new GridBagConstraints();
+		gbc_btnGuardar.gridwidth = 2;
+		gbc_btnGuardar.fill = GridBagConstraints.BOTH;
+		gbc_btnGuardar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnGuardar.gridx = 3;
+		gbc_btnGuardar.gridy = 10;
+		contentPane.add(btnGuardar, gbc_btnGuardar);	
+		
+		JLabel label_16 = new JLabel("");
+		GridBagConstraints gbc_label_16 = new GridBagConstraints();
+		gbc_label_16.fill = GridBagConstraints.BOTH;
+		gbc_label_16.insets = new Insets(0, 0, 5, 5);
+		gbc_label_16.gridx = 2;
+		gbc_label_16.gridy = 7;
+		add(label_16, gbc_label_16);
+		
+		JLabel label_17 = new JLabel("");
+		GridBagConstraints gbc_label_17 = new GridBagConstraints();
+		gbc_label_17.fill = GridBagConstraints.BOTH;
+		gbc_label_17.insets = new Insets(0, 0, 5, 0);
+		gbc_label_17.gridx = 3;
+		gbc_label_17.gridy = 7;
+		add(label_17, gbc_label_17);
+		
+		JLabel label_18 = new JLabel("");
+		GridBagConstraints gbc_label_18 = new GridBagConstraints();
+		gbc_label_18.fill = GridBagConstraints.BOTH;
+		gbc_label_18.insets = new Insets(0, 0, 0, 5);
+		gbc_label_18.gridx = 0;
+		gbc_label_18.gridy = 8;
+		add(label_18, gbc_label_18);
+
+		
+		//Creamos la caja de texto en la que mostraremos al usuario la validación de sus datos
+		textValidacion = new JTextArea();
+		textValidacion.setWrapStyleWord(true);
+		textValidacion.setLineWrap(true);
+		GridBagConstraints gbc_textValidacion = new GridBagConstraints();
+		gbc_textValidacion.gridwidth = 2;
+		gbc_textValidacion.fill = GridBagConstraints.BOTH;
+		gbc_textValidacion.insets = new Insets(0, 0, 0, 5);
+		gbc_textValidacion.gridx = 3;
+		gbc_textValidacion.gridy = 11;
+		contentPane.add(textValidacion, gbc_textValidacion);
+		
+		JLabel label_19 = new JLabel("");
+		GridBagConstraints gbc_label_19 = new GridBagConstraints();
+		gbc_label_19.fill = GridBagConstraints.BOTH;
+		gbc_label_19.insets = new Insets(0, 0, 0, 5);
+		gbc_label_19.gridx = 2;
+		gbc_label_19.gridy = 8;
+		add(label_19, gbc_label_19);
+		
+		JLabel label_20 = new JLabel("");
+		GridBagConstraints gbc_label_20 = new GridBagConstraints();
+		gbc_label_20.fill = GridBagConstraints.BOTH;
+		gbc_label_20.gridx = 3;
+		gbc_label_20.gridy = 8;
+		add(label_20, gbc_label_20);
+
+		
+		// Creamos la etiqueta lbsAvatar que albergará la imagen del usuario
+		lblAvatar = new JLabel("");
+		GridBagConstraints gbc_lblAvatar = new GridBagConstraints();
+		gbc_lblAvatar.gridheight = 6;
+		gbc_lblAvatar.gridwidth = 2;
+		gbc_lblAvatar.insets = new Insets(20, 20, 20, 20);
+		gbc_lblAvatar.gridx = 4;
+		gbc_lblAvatar.gridy = 3;
+		add(lblAvatar, gbc_lblAvatar);
+		
+		// Creamos un objeto avatar del tipo ImageIcon y cargamos el avatar el avatar del usuario
+		avatar = new ImageIcon(getClass().getResource("Imagenes/perfil2.png"));
+		
+		// Asignamos el avatar al JLabel lblAvatar
+		lblAvatar.setIcon(avatar);
+		
 		
 		//añadimos un listener sobre el botón GUARDAR
 		btnGuardar.addActionListener (new ActionListener() {
