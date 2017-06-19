@@ -4,17 +4,27 @@ import javax.swing.JTextField;
 
 import Ventanas.VentanaJuego;
 
+/*
+ * PROYECTO 08 CLASE JUGADOR
+ * Esta clase contiene los atributos del jugador, con los setters y los getters que permitirán
+ * modificar el contenido de dichos atributos según registremos un nuevo jugador, añadamos puntos
+ * al jugar o modifiquemos los datos de identificación a través de la clase Perfil
+ * 
+ * Además contiene los métodos de control isNumeric y sonEspacios, además del método toString
+ * 
+ * Esta clase no sufre cambios en este proyecto y se hereda tal cual de proyectos anteriores
+ * */
 
 public class Jugador {
 		
 	// Definimos las variables o propiedades a utilizar en la clase Jugador e inicializamos las variables con un valor por defecto
-		private String nombre="nombre";
-		private String apellido1="apellido1";
-		private String apellido2="apellido2";
-		private String nick="nick";
-		private int puntos=0;
-		private int edad=0;
-		private int id=0;
+	private int id=0;	
+	private String nombre="nombre";
+	private String apellido1="apellido1";
+	private String apellido2="apellido2";
+	private String nick="nick";
+	private int edad=0;
+	private int puntos=0;
 		
 	//definimos los getter y los setter		
 	public String getNombre() {
@@ -76,6 +86,16 @@ public class Jugador {
 	//constructor
 	public Jugador() {
 		
+	}
+	
+	// Sobrecarga del constructor para utilizar en el método buscarUsuarios de la clase Usuarios
+	public Jugador(int id, String nombre, String apellido1, String apellido2, int edad, int puntos) {
+		this.id=id;
+		this.nombre=nombre;
+		this.apellido1=apellido1;
+		this.apellido2=apellido2;
+		this.edad=edad;
+		this.puntos=puntos;
 	}
 	
 	//comprobar si una cadena de texto es un número

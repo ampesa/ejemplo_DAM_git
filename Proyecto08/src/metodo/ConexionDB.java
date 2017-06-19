@@ -6,25 +6,31 @@ import java.sql.Connection;
 import java.sql.SQLException;
 //import com.mysql.jdbc.Connection;
 
+/* PROYECTO 08 CLASE CONEXIONDB
+ * 
+ * Con esta clase definimos como se ejecutará la conexión a nuestra BBDD de jugadores/usuarios
+ * 
+ * Hemos importado los métodos SQL necesarios. DriverManager que nos permitirá conectarnos a la BBDD,
+ *  Connection para manejar la conexión a la BBDD y SQLException para manejar errores en nuestra sentencia.
+ * */
 
 public class ConexionDB {
-	// DATOS DE LA CONEXION
+	
+	// Definimos los datos de la conexión
 	static final String CONTROLADOR_MYSQL= "com.mysql.jdbc.Driver";
 	
-	//DATOS DE LA BBDD
-	private String host; //host donde está la base de datos
-	private String bbdd; //nombre de la base de datos
-	private String user; //nombre usuario para acceder base de datos
-	private String pass; //password de usuario
-	private String url;  //proporcionará al método DriverManager la dirección de conexión
-	                     //en la forma adeduaca
+	// Definimos los datos de la base de datos
+	private String host; // Ubicación de la base de datos
+	private String bbdd; // Identificación de la base de datos
+	private String user; // Usuario con el que accederemos (normalmente root)
+	private String pass; // Password de usuario
+	private String url;  // Cadena que le pasaremos al DriverManager con la dirección de conexión
 	
-	//Conexion
-	private Connection conexion = null;// maneja la conexión
+	// Conexion inicializada a null
+	private Connection conexion = null; 
 	
 	
-	//Constructor (le pasaremos los datos necesarios para la conexión)
-	
+	// Constructor con el que pasamos los datos necesarios para la conexión
 	public ConexionDB(String HOST,String BBDD,String USER,String PASS) {
 		this.host=HOST;
 		this.bbdd=BBDD;
@@ -34,28 +40,31 @@ public class ConexionDB {
 	}
 	
 	
-	//Método para conectarse con la BBDD: true si ha conseguido conectarse
+	// Método para conectarse con la BBDD. Devolverá true si ha logrado conectarse
 	public boolean connectDB(){
 		try{
-			//Lo primero es cargar el controlador MySQL el cual automáticamente se registra
+			// Cargamos el controlador MySQL que efectuará el registro
 			Class.forName(CONTROLADOR_MYSQL);
-			//Conectarnos a la BBDD
+			
+			// Nos conectamos a la BBDD
 			conexion = DriverManager.getConnection(this.url,this.user,this.pass);
 		}
-		catch( SQLException excepcionSql ) //No encuentra la Base de Datos
+		catch( SQLException excepcionSql ) 
 		{
+			// Controlamos el error en caso de no encontrar la BBDD
 			excepcionSql.printStackTrace();
 			return false;
         }
-		catch( ClassNotFoundException noEncontroClase) //No encuentra el driver para la conexión
+		catch( ClassNotFoundException noEncontroClase) 
 		{
+			// Controlamos el error en caso de no econtrar el driver de conexión
 			noEncontroClase.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 	
-	//Devuelve una instancia de la conexión
+	// Creamos el getter que devolverá una instancia de la conexión para llamarla desde otras clases
 	public Connection getConexion(){
 		return this.conexion;
 	}
