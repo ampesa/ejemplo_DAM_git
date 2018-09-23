@@ -68,7 +68,23 @@ public class GestionFicherosImpl implements GestionFicheros {
 	public void creaCarpeta(String arg0) throws GestionFicherosException {
 		
 		File file = new File(carpetaDeTrabajo,arg0);
+
+		// Podemos comprobar que el nombre de la carpeta no exceda de 218 caracteres (máximo admitido en Windows)
+		if (arg0.length()>218){
+			throw new GestionFicherosException("Error. El nombre de la carpeta es demasiado largo");
+		}
 		
+		/* Tras la comprobación anterior podemos comprobar que la longitud de la ruta (carpetaDeTrabajo) + el nombre
+		 * de la carpeta no exceda de 256 caracteres (máximo admitido en windows), pues es posible que por separado no superen
+		 * los 218 caracteres pero si superen en conjunto los 256. Pero en este caso, si queremos que la carpeta pueda contener
+		 * archivos deberemos dejar un margen de caracteres para poder incluir en las rutas el nombre de los archivos creados
+		 * En este caso dejamos 8 caracteres para el nombre del archivo y 4 para la extensión (.txt, por ejemplo). Por tanto
+		 * restamos 12 caracteres a los 256 máximos y nos quedan 244.*/
+		if ((carpetaDeTrabajo.getAbsolutePath().length() + arg0.length())>244){
+			throw new GestionFicherosException("Error. La longitud de la ruta + carpeta es excesiva");
+		}
+		
+
 		// Comprobamos que haya permiso de escritura en la carpeta
 		if (!carpetaDeTrabajo.canWrite()){
 			throw new GestionFicherosException("Error. No tiene permiso para escribir en esta carpeta");
@@ -93,8 +109,21 @@ public class GestionFicherosImpl implements GestionFicheros {
 
 	@Override
 	public void creaFichero(String arg0) throws GestionFicherosException {
-		
+
 		File file = new File(carpetaDeTrabajo,arg0);
+		
+		// Podemos comprobar que el nombre del fichero no exceda de 218 caracteres (máximo admitido en Windows)
+		if (arg0.length()>218){
+			throw new GestionFicherosException("Error. El nombre del fichero es demasiado largo");
+		}
+		
+		// Tras la comprobación anterior podemos comprobar que la longitud de la ruta (carpetaDeTrabajo) + el nombre
+		// del fichero no exceda de 256 caracteres (máximo admitido en windows), pues es posible que por separado no superen
+		// los 218 caracteres pero si superen en conjunto los 256.
+		if ((carpetaDeTrabajo.getAbsolutePath().length() + arg0.length())>256){
+			throw new GestionFicherosException("Error. La longitud de la ruta + fichero es excesiva");
+		}
+		
 		
 		// Comprobamos que haya permiso de escritura en la carpeta
 		if (!carpetaDeTrabajo.canWrite()){
@@ -144,7 +173,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 			file.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Error. NO se ha credo el fichero");
+			System.err.println("Error. NO se ha eliminado el fichero");
 		}
 		
 		// Actualizamos el contenido de la carpeta
@@ -323,7 +352,7 @@ public class GestionFicherosImpl implements GestionFicheros {
 		
 		// Comprobamos que haya permiso de escritura en la carpeta y en el archivo
 		if (!carpetaDeTrabajo.canWrite() || !file.canWrite()){
-			throw new GestionFicherosException("Error. No tiene permiso para escribir en esta carpeta");
+			throw new GestionFicherosException("Error. No tiene permiso para escribir");
 		}
 		
 		// Comprobamos que no exista ya ese fichero
