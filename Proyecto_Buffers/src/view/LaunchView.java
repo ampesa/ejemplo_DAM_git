@@ -6,10 +6,10 @@ import javax.swing.*;
 
 public class LaunchView extends JFrame {
 
-	private JButton comparar,buscar;
+	private JButton comparar,buscar, copiar;
 	private JTextArea textArea;
-	private JTextField fichero1,fichero2,palabra;
-	private JLabel label_f1,label_f2,label_pal;
+	private JTextField fichero1,fichero2,palabra, origen, destino;
+	private JLabel label_f1,label_f2,label_pal, label_or, label_des;
 	private JCheckBox primera;
 	
 	private JPanel panel;
@@ -24,14 +24,24 @@ public class LaunchView extends JFrame {
 		comparar.setPreferredSize(new Dimension(150, 26));
 		buscar = new JButton("Buscar palabra");
 		buscar.setPreferredSize(new Dimension(150, 26));
+		// Añadimos el botón copiar
+		copiar = new JButton("Copiar fichero");
+		copiar.setPreferredSize(new Dimension(150, 26));
 					
 		fichero1 = new JTextField("",10);
 		fichero2 = new JTextField("",10);
 		palabra = new JTextField("",10);
+		// Añadimos los JTextField para el fichero de origen y el de destino
+		origen = new JTextField("",10);
+		destino = new JTextField("",10);		
 		
 		label_f1 = new JLabel("Fichero 1:");
 		label_f2 = new JLabel("Fichero 2:");
 		label_pal = new JLabel("Palabra:");
+		// Añadimos las etiquetas que acompañan a los JTextField
+		label_or = new JLabel("Origen");
+		label_des = new JLabel("Destino");
+		
 		
 		primera = new JCheckBox("Primera aparición");
 		primera.setSelected(false);
@@ -49,6 +59,11 @@ public class LaunchView extends JFrame {
 		panel.add(label_pal);
 		panel.add(palabra);
 		panel.add(primera);
+		panel.add(copiar);
+		panel.add(label_or);
+		panel.add(origen);
+		panel.add(label_des);
+		panel.add(destino);
 		panel.add(textArea);
 		
         // Añadimos el JPanel al JFrame
@@ -121,6 +136,31 @@ public class LaunchView extends JFrame {
 			    m,
 			    "Error",
 			    JOptionPane.ERROR_MESSAGE);
+	}
+	
+	// Getters y Setters de los nuevos elementos del ProyectoBuffers 1e
+	public JButton getCopiar() {
+		return copiar;
+	}
+
+	public void setCopiar(JButton copiar) {
+		this.copiar = copiar;
+	}
+
+	public JTextField getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(JTextField origen) {
+		this.origen = origen;
+	}
+
+	public JTextField getDestino() {
+		return destino;
+	}
+
+	public void setDestino(JTextField destino) {
+		this.destino = destino;
 	}
 
 

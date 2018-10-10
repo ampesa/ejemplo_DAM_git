@@ -1,7 +1,11 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -11,6 +15,8 @@ public class GestionDatos {
 	
 	private BufferedReader brFichero1 = null;
 	private BufferedReader brFichero2 = null;
+	private FileInputStream fiOrigen = null;
+	private FileOutputStream foDestino = null;
 	private String str1;
 	private String str2;
 	private int contador_lineas = 1;
@@ -25,14 +31,19 @@ public class GestionDatos {
     public BufferedReader abrirFichero(String fichero) throws IOException {
     	return new BufferedReader (new FileReader(fichero)); 
     }
-
-    //TODO: Implementa una función para cerrar ficheros
-    // cerrarFichero recibe un BufferedReader, comprueba qen no sea nulo y lo cierra
-    public void cerrarFichero(BufferedReader br) throws IOException {
-            if (br != null)
-                br.close();
-            throw new IOException ("no se pudo cerrar los ficheros");
+    
+    public File abrirFicheros(String fichero) throws IOException {
+    	return  new File (fichero); 
     }
+    
+    //TODO: Implementa una función para cerrar ficheros
+    // Método para cerrar ficheros
+    public void cerrarFichero(Closeable c) {
+        try {
+        	c.close();
+        } catch (IOException e){
+        }
+      }
     
     // Creamos este método para obtener el total de líneas de un fichero a través de BufferedReader
     public int contarLineas(BufferedReader br) throws IOException{
@@ -75,7 +86,8 @@ public class GestionDatos {
 		// Reseteamos el contador de líneas a 1
 		contador_lineas = 1;
 		return true;
-	}
+	} // Fin de compararContenido
+	
 	
 	public int buscarPalabra (String fichero1, String palabra, boolean primera_aparicion) throws IOException{
 		//TODO: Implementa la función
@@ -140,6 +152,34 @@ public class GestionDatos {
 		cerrarFichero(brFichero2);
 		// Si los condicionales anteriores no han devuelto nada, la palabra no está en el fichero y el método devolverá -1
 		return -1;
-	}	
+	}	// Fin de buscarPalabra
 
+	public long copiarFichero (String fichero_origen, String fichero_destino) throws IOException {
+		//TODO: Implementa la función
+		
+		// Utilizamos un long para recoger el tamaño del fichero de origen en bytes
+		long size = abrirFicheros(fichero_origen).length();
+		
+		// Creamos un buffer (array de bytes) del tamaño del archivo de origen para optimizar recursos
+		byte[] buffer = new byte [(int) size];
+		
+		// Abrimos el flujo de entrada sobre el archivo de origen y el de salida sobre el de destino
+		fiOrigen = new FileInputStream (abrirFicheros(fichero_origen));
+		foDestino = new FileOutputStream (abrirFicheros(fichero_destino));
+		
+		// Leemos el origen en el buffer y después lo escribimos
+		fiOrigen.read(buffer);
+		foDestino.write(buffer);
+		
+		// asignamos al long size el tamaño en bytes del archivo de destino despues de la copia
+		size = abrirFicheros(fichero_destino).length();
+		
+		// cerramos los flujos de bytes
+		cerrarFichero(fiOrigen);
+		cerrarFichero(foDestino);
+		
+		// devolvemos el tamaño en bytes compiado en formato int
+		return size;
+	}	// Fin de copiarFichero
+	
 }

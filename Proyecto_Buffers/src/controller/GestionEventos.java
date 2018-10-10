@@ -12,7 +12,7 @@ public class GestionEventos {
 
 	private GestionDatos model;
 	private LaunchView view;
-	private ActionListener actionListener_comparar, actionListener_buscar;
+	private ActionListener actionListener_comparar, actionListener_buscar, actionListener_copiar;
 
 	// Constructor
 	public GestionEventos(GestionDatos model, LaunchView view) {
@@ -31,7 +31,7 @@ public class GestionEventos {
 					call_compararContenido();
 				} catch (IOException e) {
 					// Mostramos el error a través del método showError de la clase LaunchView
-					view.showError("Fallo al comparar contenido de los ficheros");;
+					view.showError("Fallo al comparar contenido de los ficheros");
 				}
 
 			}
@@ -48,16 +48,34 @@ public class GestionEventos {
 					call_buscarPalabra();
 				} catch (IllegalArgumentException e) {
 					// Mostramos el error a través del método showError de la clase LaunchView
-					view.showError("Fallo al buscar la palabra en el fichero");;
+					view.showError("Fallo al buscar la palabra en el fichero");
 				}
 			}
 		};
 		// Añadimos el listener al botón buscar
 		view.getBuscar().addActionListener(actionListener_buscar);
-	}
+		
+		//Implementación del listener del botón copiar
+		actionListener_copiar = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// TODO: Llamar a la función call_buscarPalabra
+				// Ejecutamos call_buscarPalabra envuelto en try... catch...
+				try {
+					call_copiarFichero();
+				} catch (IllegalArgumentException e) {
+					// Mostramos el error a través del método showError de la clase LaunchView
+					view.showError("Fallo al intentar copiar el fichero");
+				}
+			}
+		};
+		// Añadimos el listener al botón buscar
+		view.getCopiar().addActionListener(actionListener_copiar);
+		
+	} // Fin del método contol
 
+	
 	// Método que llama a compararContenido de GestionDatos
-	private int call_compararContenido() throws IOException {
+	private int call_compararContenido() throws FileNotFoundException {
 		
 		System.out.println("se pasan a model.compararContenido los ficheros: " + view.getFichero1().getText() + " y " 
 				+ view.getFichero2().getText());
@@ -79,9 +97,9 @@ public class GestionEventos {
 			view.showError("Error al llamar al método compararContenido");
 			return 2;
 		}
-		
-	}
+	} // Fin del método call_compararContenido()
 
+	
 	// Método que llama a buscarPalabra de GestionDatos
 	private int call_buscarPalabra() {
 		// TODO: Llamar a la función buscarPalabra de GestionDatos
@@ -114,6 +132,24 @@ public class GestionEventos {
 			view.showError("Error al ejecutar método buscarPalabra");
 			return 3;
 		}
-	}
+	} // Fin del método call_buscarPalabra
 
-}
+	private int call_copiarFichero() {
+		// TODO: Llamar a la función copiarFichero de GestionDatos
+		// TODO: Gestionar excepciones
+		System.out.println("se pasa a model.copiarFichero el fichero: " + view.getOrigen().getText());
+		
+		try {
+			view.writeTextArea("Se ha copiado un total de: " + model.copiarFichero(view.getOrigen().getText(), view.getDestino().getText()) + " bytes");
+				return 1;
+
+		}catch (FileNotFoundException e){
+			view.showError("Error! no se encontro el fichero Origen");
+			return 2;
+		}catch (IOException e){
+			view.showError("Error al ejecutar método copiarFichero");
+			return 3;
+		}
+	} // Fin del método call_copiarFichero
+	
+} //Fin de GestionEventos
