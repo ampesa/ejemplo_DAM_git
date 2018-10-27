@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import model.Libro;
+
+import javax.swing.JTextField;
 
 import model.*;
 import view.*;
@@ -12,7 +17,8 @@ public class GestionEventos {
 
 	private GestionDatos model;
 	private LaunchView view;
-	private ActionListener actionListener_comparar, actionListener_buscar, actionListener_copiar;
+	private ActionListener actionListener_comparar, actionListener_buscar, actionListener_copiar, actionListener_guardarLibro, actionListener_limpiar,
+		actionListener_recuperarLibro, actionListener_recuperarTodos;
 
 	// Constructor
 	public GestionEventos(GestionDatos model, LaunchView view) {
@@ -71,6 +77,63 @@ public class GestionEventos {
 		// Añadimos el listener al botón buscar
 		view.getCopiar().addActionListener(actionListener_copiar);
 		
+		// Implementamos el Listener del botón GUARDAR LIBRO
+		actionListener_guardarLibro = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// TODO: Llamar a la función call_guardar_libro
+				// Ejecutamos call_buscarPalabra envuelto en try... catch...
+				try {
+					call_guardar_libro();
+				} catch (IllegalArgumentException e) {
+					view.showError("Fallo al intentar guardar el libro");
+				}
+			}
+		};
+		
+		// Añadimos el Listener del botón GUARDAR LIBRO
+		view.getGuardarLibro().addActionListener(actionListener_guardarLibro);	
+		
+		
+		// Implementamos el Listener del botón RECUPERAR LIBRO
+		actionListener_recuperarLibro = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// TODO: Llamar a la función call_guardar_libro
+				// Ejecutamos call_buscarPalabra envuelto en try... catch...
+				try {
+					call_recuperar_libro();
+				} catch (IllegalArgumentException e) {
+					view.showError("Fallo al intentar recuperar el libro");
+				}
+			}
+		};		
+		// Añadimos el Listener del botón RECUPERAR LIBRO
+		view.getRecuperarLibro().addActionListener(actionListener_recuperarLibro);	
+		
+		
+		// Implementamos el Listenter del botón RECUPERAR TODOS
+		actionListener_recuperarTodos = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// TODO: Llamar a la función call_guardar_libro
+				// Ejecutamos call_buscarPalabra envuelto en try... catch...
+				try {
+					call_recuperar_todos();
+				} catch (IllegalArgumentException e) {
+					view.showError("Fallo al intentar recuperar todos los libros");
+				}
+			}
+		};		
+		// Añadimos el Listener del botón RECUPERAR TODOS
+		view.getRecuperarTodos().addActionListener(actionListener_recuperarTodos);	
+		
+		// Implementamos el Listenter del botón LIMPIAR
+		actionListener_limpiar = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				// Ejecutamos limpiar()
+				limpiar();
+			}
+		};		
+		// Añadimos el Listener del botón LIMPIAR
+		view.getLimpiar().addActionListener(actionListener_limpiar);	
 	} // Fin del método contol
 
 	
@@ -133,7 +196,8 @@ public class GestionEventos {
 			return 3;
 		}
 	} // Fin del método call_buscarPalabra
-
+	
+	// Implementación del método call_copiarFichero()
 	private int call_copiarFichero() {
 		// TODO: Llamar a la función copiarFichero de GestionDatos
 		// TODO: Gestionar excepciones
@@ -152,4 +216,81 @@ public class GestionEventos {
 		}
 	} // Fin del método call_copiarFichero
 	
+	// Implementación del método call_guardarLibro()
+	public void call_guardar_libro() {
+		// Controlamos que el año de publicación y el número de páginas son int
+		if (!isNumeric(view.getAnyo_publicacion().getText())){
+			view.showError("El año de publicación debe ser un número natural");
+		}else if (!isNumeric(view.getNum_paginas().getText())){
+			view.showError("El número de páginas debe ser un número natural");
+		}else{
+			// Creamos un objeto libro con los valores recibidos 
+			Libro libro = new Libro(view.getIdentificador().getText(), view.getTitulo().getText(), view.getAutor().getText(),
+					Integer.parseInt(view.getAnyo_publicacion().getText()), view.getEditor().getText(), 
+					Integer.parseInt(view.getNum_paginas().getText()));
+			// Pasamos el objeto libro creado al método guardar_libro
+			try {
+				if (model.guardar_libro(libro) == 1) {
+					view.writeTextArea("Se ha guardado el libro con el identificador: " + view.getIdentificador().getText());
+				} else {
+					view.showError("Error. No se pudo guardar el libro");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				view.showError("Error IO. No se pudo guardar el libro");
+			}
+		}
+	}
+	// Implementación del método call_recueprarLibro()
+	public void call_recuperar_libro() {
+		if ((view.getIdentificador().getText()).equals("")){
+			view.showError("Error. Debe introducir un identificador válido");
+		}else if (model.recuperar_libro(view.getIdentificador().getText()) == null){
+			view.showError("Error al recuperar libro. No existe el identificador");
+		} else {
+			view.writeTextArea(model.recuperar_libro(view.getIdentificador().getText()).printLibro());
+		}
+		
+	}
+	
+	// Implementación del método call_recuperarTodos()
+	public void call_recuperar_todos() {
+		ArrayList<Libro> libros = new ArrayList();
+		libros=model.recuperar_todos();
+		
+		if (libros == null){
+			view.showError("Error al recuperar la lista de libros");
+		} else {
+			Iterator it = libros.iterator();
+			while (it.hasNext()){
+			view.writeTextArea(((Libro)it.next()).printLibro());
+			}
+		}
+	}
+	
+	public void limpiar(){
+		view.getTextArea().setText("");
+		view.getFichero1().setText("");
+		view.getFichero2().setText("");
+		view.getPalabra().setText("");
+		view.getOrigen().setText("");
+		view.getDestino().setText("");
+		view.getIdentificador().setText("");
+		view.getTitulo().setText("");
+		view.getAutor().setText("");
+		view.getAnyo_publicacion().setText("");
+		view.getEditor().setText("");
+		view.getNum_paginas().setText("");
+		view.getPrimera().setSelected(false);
+	}
+	
+	//comprobar si una cadena de texto es un número
+	public boolean isNumeric (String cadena) {
+		try {
+			Integer.parseInt(cadena);
+			return true;
+		}catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
 } //Fin de GestionEventos

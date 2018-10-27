@@ -7,7 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.filechooser.FileFilter;
 
 
 
@@ -17,10 +25,17 @@ public class GestionDatos {
 	private BufferedReader brFichero2 = null;
 	private FileInputStream fiOrigen = null;
 	private FileOutputStream foDestino = null;
+	private ObjectOutputStream out = null;
+	private ObjectInputStream in = null;
+	private File carpetaLibros = null;
 	private String str1;
 	private String str2;
 	private int contador_lineas = 1;
 	private int ultima;
+	// Creamos un ArrayList para almacenar los libros
+	private ArrayList<Libro> libros = new ArrayList<Libro>();
+	// Creamos un String y le pasamos la carpeta que alberga los libros
+	private String path = System.getProperty("user.dir") + "\\Libros\\";
 
 	public GestionDatos() {
 
@@ -28,11 +43,11 @@ public class GestionDatos {
 
 	//TODO: Implementa una función para abrir ficheros
 	// abrirFichero recibe un String con el nombre del fichero y crea un BufferedReader sobre el fichero con ese nombre
-    public BufferedReader abrirFichero(String fichero) throws IOException {
+    public BufferedReader abrirBuffered (String fichero) throws IOException {
     	return new BufferedReader (new FileReader(fichero)); 
     }
     
-    public File abrirFicheros(String fichero) throws IOException {
+    public File abrirFile(String fichero) throws IOException {
     	return  new File (fichero); 
     }
     
@@ -57,8 +72,8 @@ public class GestionDatos {
 	public boolean compararContenido (String fichero1, String fichero2) throws IOException{
 		//TODO: Implementa la función
 		// Abrimos los fichero con el método abrirFichero y los pasamos a brFichero1 y brFichero2
-		brFichero1 = abrirFichero(fichero1);
-		brFichero2 = abrirFichero(fichero2);
+		brFichero1 = abrirBuffered(fichero1);
+		brFichero2 = abrirBuffered(fichero2);
 		
 		// Utilizamos los Strings str1 y str2 para almacenar las líneas de cada archivo y compararlas
 		str1 = brFichero1.readLine();
@@ -96,8 +111,8 @@ public class GestionDatos {
 		System.out.println("buscarPalabra ha recibido: " + fichero1 + palabra + primera_aparicion);
 		
 		// abrimos el fichero
-		brFichero1 = abrirFichero(fichero1);
-		brFichero2 = abrirFichero(fichero1);
+		brFichero1 = abrirBuffered(fichero1);
+		brFichero2 = abrirBuffered(fichero1);
 
 		// Obtenemos el total de líneas del fichero
 		int total_lineas = contarLineas(brFichero2);
@@ -158,21 +173,21 @@ public class GestionDatos {
 		//TODO: Implementa la función
 		
 		// Utilizamos un long para recoger el tamaño del fichero de origen en bytes
-		long size = abrirFicheros(fichero_origen).length();
+		long size = abrirFile(fichero_origen).length();
 		
 		// Creamos un buffer (array de bytes) del tamaño del archivo de origen para optimizar recursos
 		byte[] buffer = new byte [(int) size];
 		
 		// Abrimos el flujo de entrada sobre el archivo de origen y el de salida sobre el de destino
-		fiOrigen = new FileInputStream (abrirFicheros(fichero_origen));
-		foDestino = new FileOutputStream (abrirFicheros(fichero_destino));
+		fiOrigen = new FileInputStream (abrirFile(fichero_origen));
+		foDestino = new FileOutputStream (abrirFile(fichero_destino));
 		
 		// Leemos el origen en el buffer y después lo escribimos
 		fiOrigen.read(buffer);
 		foDestino.write(buffer);
 		
 		// asignamos al long size el tamaño en bytes del archivo de destino despues de la copia
-		size = abrirFicheros(fichero_destino).length();
+		size = abrirFile(fichero_destino).length();
 		
 		// cerramos los flujos de bytes
 		cerrarFichero(fiOrigen);
@@ -181,5 +196,76 @@ public class GestionDatos {
 		// devolvemos el tamaño en bytes compiado en formato int
 		return size;
 	}	// Fin de copiarFichero
+	
+	// Implementación del método guardar_libro(Libro libro)
+	public int guardar_libro(Libro libro) throws IOException {
+		// recibe un objeto libro y lo añade en el ArrayList, devuelve 1 si correcto y 0 si incorrecto
+		String fichero_libro = path + libro.getIdentificador() + ".dat";
+		try {
+			out = new ObjectOutputStream(new FileOutputStream(fichero_libro));
+			out.writeObject(libro);
+			libros.add(libro);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			cerrarFichero(out);
+			return 1;
+		}
+		
+	}
+	
+	// Implementacion del método recueprar_libro(String identificador)
+	public Libro recuperar_libro(String identificador) {
+		// Recibe un String identificador y devuelve un objeto libro
+		Libro libro = null;
+		try { 
+			in = new ObjectInputStream (new FileInputStream(path + identificador + ".dat"));
+			libro = (Libro) in.readObject();			
+		} catch (ClassNotFoundException e){
+			System.err.println("Error de fichero");
+			return null;
+		} catch (IOException e){
+			System.err.println("Error IO");
+			return null;
+		} finally {
+			cerrarFichero(in);
+			return libro;
+		}
+		
+	}
+	
+	// Implementación del método ArrayList<Libro> recuperar_todos()
+	public ArrayList<Libro> recuperar_todos(){
+		
+		// Creamos un objeto File y le pasamos la ruta en la que están almacenados los libros
+		carpetaLibros = new File (path);
+		System.out.println(carpetaLibros);
+		String[] listaLibros = carpetaLibros.list();
+		System.out.println("la carpeta Libros contiene:");
+		for (int i=0; i<listaLibros.length; i++){
+			System.out.println(listaLibros[i]);
+		}
+		
+		// Leemos los ficheros y los añadimos al ArrayList libros
+		try { 
+			for (int i=0; i<listaLibros.length; i++){
+				System.out.println("imprimo ruta" + path + listaLibros[i]);
+				in = new ObjectInputStream (new FileInputStream(path + listaLibros[i]));
+				Libro l = (Libro) in.readObject();
+				libros.add(l);
+				cerrarFichero(in);
+			}
+		} catch (ClassNotFoundException e){
+			System.err.println("Error de fichero");
+			return null;
+		} catch (IOException e){
+			System.err.println("Error IO");
+			return null;
+		} finally {
+			return libros;
+		}
+			//return libros;
+	}
 	
 }
