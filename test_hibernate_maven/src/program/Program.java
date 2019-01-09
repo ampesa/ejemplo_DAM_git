@@ -33,6 +33,7 @@ public class Program {
 		// Iniciamos Transacción
 		session.beginTransaction();
 		
+		/*
 		// Añadimos Empresas
 		Empresa e = new Empresa();
 		e.setCif("B46326548");
@@ -46,17 +47,22 @@ public class Program {
 		d.setNombre("Palets Mariano");
 		d.setEmpleados(45);
 		d.setDireccion("Calle Calvario, 2. 46470 - Catarroja");
-		session.save(d);
+		session.save(d);*/
 		
 		// Añadimos Pedidos
 		Pedido p = new Pedido();
 		p.setFecha(new Date());
+		p.getItem().add(new Item("tijeras", 7));
+		p.getItem().add(new Item("papel hoja A4", 500));
 		session.save(p);
 		
 		Pedido q = new Pedido();
 		q.setFecha(new Date());
+		q.getItem().add(new Item("grapadora", 5));
+		q.getItem().add(new Item("grapas", 1000));
 		session.save(q);
 		
+		/*
 		// Añadimos Items
 		Item i = new Item();
 		i.setNombre("Grapadora 6589");
@@ -66,22 +72,38 @@ public class Program {
 		Item j = new Item();
 		j.setNombre("Grapas 6588");
 		j.setCantidad(1000);
-		session.save(j);
+		session.save(j);*/
 		
 		// Hacemos el commit
 		session.getTransaction().commit();
 		
+		/*
 		// Comprobamos que han persistido en la base de datos
 		Empresa f = session.get(Empresa.class, "B46326548");
 		System.out.println("Recuperamos la empresa " + e.getNombre() + " con " + e.getEmpleados() + " empleados");
+		*/
 		
 		// Comprobamos la persistencia del pedido recuperándolo desde la bbdd
-		Pedido r = session.get(Pedido.class, 1);
-		System.out.println("Recuperamos el pedido " + p.getId() + " con fecha " + p.getFecha());
+		Pedido p2 = session.get(Pedido.class, 1);
+		System.out.println("Recuperamos el pedido " + p2.getId() + " con fecha " + p2.getFecha() + "que contiene: ");
 		
+		for (Item item : p2.getItem()){
+			System.out.println(item.getNombre() + " " + item.getCantidad());
+		}
+		
+		// Recuperamos también el pedido en la posición 2
+		Pedido p3 = session.get(Pedido.class, 2);
+		System.out.println("Recuperamos el pedido " + p3.getId() + " con fecha " + p3.getFecha() + "que contiene: ");
+
+		for (Item item : p3.getItem()){
+			System.out.println(item.getNombre() + " " + item.getCantidad());
+		}		
+		
+		/*
 		// Hacemos lo mismo con un Item
 		Item k = session.get(Item.class, 1);
 		System.out.println("Recuperamos el item " + i.getNombre() + " con " + i.getCantidad() + " unidades");
+		*/
 		
 		// Cerramos session y SessionFactory
 		session.close();

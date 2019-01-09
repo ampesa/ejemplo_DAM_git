@@ -11,5 +11,15 @@
         <property name="fecha" type="java.util.Date">
             <column name="FECHA" />
         </property>
+        
+        <list name="item" table="ITEMS_PEDIDO">
+	       <key column="ID"/>
+ 	       <list-index column="POSICION">
+ 	       </list-index>
+   		   <composite-element class="program.Item">
+     		   	<property name="nombre" type="java.lang.String" column="NOMBRE_ITEM"/>
+       		 	<property name="cantidad" type="int" column="CANTIDAD"/>
+     	   </composite-element>          
+       	</list>
     </class>
 </hibernate-mapping>

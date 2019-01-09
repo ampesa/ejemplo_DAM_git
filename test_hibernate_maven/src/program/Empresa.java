@@ -7,6 +7,7 @@ public class Empresa {
 	private int empleados;
 	private String direccion;
 	
+	
 	public String getCif() {
 		return cif;
 	}
