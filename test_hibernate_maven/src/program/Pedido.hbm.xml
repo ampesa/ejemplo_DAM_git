@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 08-ene-2019 22:58:50 by Hibernate Tools 3.5.0.Final -->
+<!-- Generated 09-ene-2019 2:48:07 by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
     <class name="program.Pedido" table="PEDIDOS">
         <id name="id" type="int">
@@ -11,15 +11,15 @@
         <property name="fecha" type="java.util.Date">
             <column name="FECHA" />
         </property>
-        
-        <list name="item" table="ITEMS_PEDIDO">
-	       <key column="ID"/>
- 	       <list-index column="POSICION">
- 	       </list-index>
-   		   <composite-element class="program.Item">
-     		   	<property name="nombre" type="java.lang.String" column="NOMBRE_ITEM"/>
-       		 	<property name="cantidad" type="int" column="CANTIDAD"/>
-     	   </composite-element>          
-       	</list>
+        <many-to-one name="empresa" class="program.Empresa" not-null="true">
+            <column name="ID_EMPRESA" />
+        </many-to-one>
+        <list name="item" inverse="false" table="ITEM" lazy="true">
+            <key>
+                <column name="ID" />
+            </key>
+            <list-index column="POSICION"></list-index>
+            <one-to-many class="program.Item" />
+        </list>
     </class>
 </hibernate-mapping>

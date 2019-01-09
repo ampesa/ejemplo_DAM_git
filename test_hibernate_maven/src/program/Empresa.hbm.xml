@@ -14,8 +14,12 @@
         <property name="empleados" type="int">
             <column name="EMPLEADOS" />
         </property>
-        <property name="direccion" type="java.lang.String">
-            <column name="DIRECCION" />
-        </property>
+		<one-to-one name="direccion" class="program.Direccion" cascade="save-update"/>
+        <list name="pedido" table="PEDIDO_EMPRESA" inverse="true" cascade="save-update">
+        	<key column="ID_EMPRESA"/>
+        	<list-index column="POSICION">
+        	</list-index>
+        	<one-to-many class="program.Pedido"/>
+        </list>
     </class>
 </hibernate-mapping>

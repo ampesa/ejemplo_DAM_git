@@ -9,7 +9,20 @@ public class Pedido {
 	private int id;
 	private Date fecha;
 	
+	// Para representar la relación uno a muchos entre Empresa y Pedido también añadimos Empresa a la clase Pedido
+	private Empresa empresa;
+	
 	private List<Item> item = new ArrayList<Item>();
+	
+	public Pedido(){
+		
+	}
+	
+	public Pedido(Date date, ArrayList<Item> item){
+		super();
+		this.fecha=date;
+		this.item=item;
+	}
 	
 	public int getId() {
 		return id;
@@ -28,6 +41,12 @@ public class Pedido {
 	}
 	public void setItem(List<Item> item) {
 		this.item = item;
+	}
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
 	
 	

@@ -1,6 +1,9 @@
 package program;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.hibernate.Session;
 
 /********************************************************************************************************
@@ -33,34 +36,53 @@ public class Program {
 		// Iniciamos Transacción
 		session.beginTransaction();
 		
-		/*
+		
 		// Añadimos Empresas
+		
 		Empresa e = new Empresa();
 		e.setCif("B46326548");
 		e.setNombre("Cementos Pepe");
 		e.setEmpleados(23);
-		e.setDireccion("Calle 2 de mayo, 23. 46980 - Paterna");
+		e.setDireccion(new Direccion("Dos de Mayo, 1", "Paterna", 46980));
+		// Creamos unos items para añadir a los pedidos que añadiremos a la empresa
+		Item i = new Item("papelera", 3);
+		Item j = new Item("cartulinas", 24);
+		// Creamos un arraylist para contener los items
+		ArrayList<Item> items = new ArrayList<Item>();
+		// Probamos dos formas distintas de añadir el pedido
+		Pedido p = new Pedido();
+		p.getItem().add(i);
+		p.getItem().add(j);
+		p.setFecha(new Date());
+		e.addPedido(p);
+		items.add(i);
+		items.add(j);
+		e.addPedido(new Pedido(new Date(), items));
 		session.save(e);
+		
 		
 		Empresa d = new Empresa();
 		d.setCif("A46857925");
 		d.setNombre("Palets Mariano");
 		d.setEmpleados(45);
-		d.setDireccion("Calle Calvario, 2. 46470 - Catarroja");
-		session.save(d);*/
+		d.setDireccion(new Direccion("Calle Calvario, 2", "Catarroja", 46470));
+		Pedido q = new Pedido();
+		q.setFecha(new Date());
+		q.getItem().add(new Item("grapadora", 5));
+		q.getItem().add(new Item("grapas", 1000));
+		d.addPedido(q);
+		session.save(d);
 		
+		/*
 		// Añadimos Pedidos
 		Pedido p = new Pedido();
 		p.setFecha(new Date());
 		p.getItem().add(new Item("tijeras", 7));
 		p.getItem().add(new Item("papel hoja A4", 500));
-		session.save(p);
+		session.save(p);*/
 		
-		Pedido q = new Pedido();
-		q.setFecha(new Date());
-		q.getItem().add(new Item("grapadora", 5));
-		q.getItem().add(new Item("grapas", 1000));
-		session.save(q);
+
+		//session.save(q);
 		
 		/*
 		// Añadimos Items
@@ -77,12 +99,12 @@ public class Program {
 		// Hacemos el commit
 		session.getTransaction().commit();
 		
-		/*
-		// Comprobamos que han persistido en la base de datos
+		
+		//Comprobamos que han persistido en la base de datos
 		Empresa f = session.get(Empresa.class, "B46326548");
 		System.out.println("Recuperamos la empresa " + e.getNombre() + " con " + e.getEmpleados() + " empleados");
-		*/
 		
+		/*
 		// Comprobamos la persistencia del pedido recuperándolo desde la bbdd
 		Pedido p2 = session.get(Pedido.class, 1);
 		System.out.println("Recuperamos el pedido " + p2.getId() + " con fecha " + p2.getFecha() + "que contiene: ");
@@ -97,7 +119,7 @@ public class Program {
 
 		for (Item item : p3.getItem()){
 			System.out.println(item.getNombre() + " " + item.getCantidad());
-		}		
+		}*/		
 		
 		/*
 		// Hacemos lo mismo con un Item
